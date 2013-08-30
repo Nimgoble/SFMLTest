@@ -19,8 +19,10 @@ namespace SFMLTest
 		void Tick();
 	private:
 		//private methods
-		void DrawObjects();
+		void TickObjects();
 		void DoCollisions();
+
+		void CreateTestObjects();
 
 		//private variables
 		sf::Vector2f size;

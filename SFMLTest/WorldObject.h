@@ -7,17 +7,19 @@
 
 namespace SFMLTest
 {
-	class WorldObject
+	class WorldObject : public sf::Drawable
 	{
 	public:
 		WorldObject();
-		WorldObject(sf::Vector2<int> boundingBox, sf::Vector2f position, sf::Vector2f velocity, float weight);
+		WorldObject(sf::Vector2f boundingBox, sf::Vector2f position, sf::Vector2f velocity, float weight);
 
 		virtual void OnTick();
 
+		virtual void OnDraw(sf::RenderTarget& target, sf::RenderStates states);
+
 		//Accessors and Modifiers
-		sf::Vector2<int> getBoundingBox(){return boundingBox;}
-		void setBoundingBox(sf::Vector2<int> newBoundingBox) {boundingBox = newBoundingBox;}
+		sf::Vector2f getBoundingBox(){return boundingBox;}
+		void setBoundingBox(sf::Vector2f newBoundingBox) {boundingBox = newBoundingBox;}
 
 		sf::Vector2f getPosition() {return position;}
 		void setPosition(sf::Vector2f newPosition) {position = newPosition;}
@@ -29,7 +31,10 @@ namespace SFMLTest
 		void setWeight(int newWeight) {weight = newWeight;}
 
 	protected:
-		sf::Vector2<int> boundingBox;
+
+		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+		sf::Vector2f boundingBox;
 		sf::Vector2f position;
 		sf::Vector2f velocity;
 		float weight;
