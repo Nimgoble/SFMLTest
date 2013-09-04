@@ -2,7 +2,7 @@
 #include "World.h"
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(600, 400), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML works!");
 
 	SFMLTest::World world(&window);
 
@@ -16,6 +16,8 @@ int main()
         }
 		world.Tick();
     }
+
+	world.Cleanup();
 
     return 0;
 }

@@ -1,26 +1,17 @@
-﻿Build started 8/30/2013 4:58:46 PM.
-     1>Project "C:\Source code\GitHub\SFMLTest\SFMLTest\SFMLTest.vcxproj" on node 2 (build target(s)).
+﻿Build started 9/3/2013 10:43:47 PM.
+     1>Project "E:\Programming\GitHub\SFMLTest\SFMLTest\SFMLTest.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Touching "Debug\SFMLTest.unsuccessfulbuild".
+         Creating "Debug\SFMLTest.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I".\..\ThirdParty\SFML-2.1\include" /ZI /nologo /W3 /WX- /Od /Oy- /D SFML_STATIC /D _MBCS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt World.cpp WorldObject.cpp main.cpp
-         WorldObject.cpp
-     1>c:\source code\github\sfmltest\sfmltest\worldobject.h(31): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>c:\source code\github\sfmltest\sfmltest\worldobject.cpp(25): error C2662: 'SFMLTest::WorldObject::OnDraw' : cannot convert 'this' pointer from 'const SFMLTest::WorldObject' to 'SFMLTest::WorldObject &'
-                 Conversion loses qualifiers
-         Generating Code...
-         Compiling...
-         World.cpp
-     1>c:\source code\github\sfmltest\sfmltest\worldobject.h(31): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>c:\source code\github\sfmltest\sfmltest\world.cpp(68): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>c:\source code\github\sfmltest\sfmltest\world.cpp(78): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-         Generating Code...
-         Compiling...
-         main.cpp
-     1>c:\source code\github\sfmltest\sfmltest\worldobject.h(31): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-         Generating Code...
-     1>Done Building Project "C:\Source code\GitHub\SFMLTest\SFMLTest\SFMLTest.vcxproj" (build target(s)) -- FAILED.
+         All outputs are up-to-date.
+       Link:
+         All outputs are up-to-date.
+         SFMLTest.vcxproj -> E:\Programming\GitHub\SFMLTest\SFMLTest\Debug\SFMLTest.exe
+       FinalizeBuildStatus:
+         Deleting file "Debug\SFMLTest.unsuccessfulbuild".
+         Touching "Debug\SFMLTest.lastbuildstate".
+     1>Done Building Project "E:\Programming\GitHub\SFMLTest\SFMLTest\SFMLTest.vcxproj" (build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:02.23
+Time Elapsed 00:00:00.02

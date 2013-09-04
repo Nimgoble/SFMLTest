@@ -4,6 +4,7 @@
 #define WORLDOBJECT_H
 
 #include <SFML/Graphics.hpp>
+#include "Box2D\Box2D.h"
 
 namespace SFMLTest
 {
@@ -12,10 +13,11 @@ namespace SFMLTest
 	public:
 		WorldObject();
 		WorldObject(sf::Vector2f boundingBox, sf::Vector2f position, sf::Vector2f velocity, float weight);
+		WorldObject(b2Body *boxBody) {this->boxBody = boxBody;};
 
 		virtual void OnTick();
 
-		virtual void OnDraw(sf::RenderTarget& target, sf::RenderStates states);
+		virtual bool CheckCollision(const WorldObject &other);
 
 		//Accessors and Modifiers
 		sf::Vector2f getBoundingBox(){return boundingBox;}
@@ -37,6 +39,7 @@ namespace SFMLTest
 		sf::Vector2f boundingBox;
 		sf::Vector2f position;
 		sf::Vector2f velocity;
+		b2Body *boxBody;
 		float weight;
 	};
 };

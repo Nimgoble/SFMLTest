@@ -19,12 +19,13 @@ void WorldObject::OnTick()
 {
 }
 
+bool WorldObject::CheckCollision(const WorldObject &other)
+{
+	return false;
+}
+
 //Do nothing is the default behavior
 void WorldObject::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	OnDraw(target, states);
-}
-
-void WorldObject::OnDraw(sf::RenderTarget& target, sf::RenderStates states)
-{
+	//OnDraw(&target, states);
 }
