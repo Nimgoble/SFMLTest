@@ -1,5 +1,5 @@
 #include "DebugDrawer.h"
-#include "ConversionHelpers.h"
+/*#include "ConversionHelpers.h"
 using namespace SFMLTest;
 
 void DebugDrawer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
@@ -8,7 +8,7 @@ void DebugDrawer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b
 	shape.setPointCount(vertexCount);
 	for (int i = 0; i < vertexCount; i++) 
 	{
-		sf::Vector2f point = B2VecToSFMLVec(vertices[i]);
+		sf::Vector3f point = B2VecToSFMLVec(vertices[i]);
 		shape.setPoint(i, point);
     }
 
@@ -21,7 +21,7 @@ void DebugDrawer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, co
 	shape.setPointCount(vertexCount);
 	for (int i = 0; i < vertexCount; i++) 
 	{
-		sf::Vector2f point = B2VecToSFMLVec(vertices[i]);
+		sf::Vector3f point = B2VecToSFMLVec(vertices[i]);
 		shape.setPoint(i, point);
     }
 
@@ -42,9 +42,13 @@ void DebugDrawer::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2
 }
 void DebugDrawer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 {
-	/*sf::RectangleShape shape;
-	shape.*/
+	sf::RectangleShape shape;
+	shape.
 }
 void DebugDrawer::DrawTransform(const b2Transform& xf)
 {
-}
+	sf::RectangleShape shape(sf::Vector3f(1.0f, 1.0f));
+	shape.setPosition(B2VecToSFMLVec(xf.p));
+	shape.setFillColor(sf::Color::White);
+	target->draw(shape);
+}*/

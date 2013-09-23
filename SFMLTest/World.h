@@ -9,7 +9,6 @@
 #include "Grid.h"
 #include "WorldObject.h"
 #include "DebugDrawer.h"
-#include "Box2D\Box2D.h"
 
 namespace SFMLTest
 {
@@ -40,14 +39,10 @@ namespace SFMLTest
 		sf::RenderWindow *window;
 		sf::Clock clock;
 
-		b2Vec2 gravity;
-		b2World *world;
-
 		Grid grid;
-		DebugDrawer debugDrawer;
+		//DebugDrawer debugDrawer;
 
 		std::vector<WorldObject *> worldObjects;
-		std::vector<b2Body *> b2Bodies;
 	};
 };
 

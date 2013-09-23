@@ -4,11 +4,11 @@
 #define DEBUGDRAWER_H
 
 #include <SFML/Graphics.hpp>
-#include "Box2D\Box2D.h"
+//#include "Box2D\Box2D.h"
 
 namespace SFMLTest
 {
-	class DebugDrawer : public b2Draw
+	/*class DebugDrawer : public b2Draw
 	{
 	public:
 		void setRenderTarget(sf::RenderTarget *target){this->target = target;};
@@ -21,7 +21,7 @@ namespace SFMLTest
 
 	private:
 		sf::RenderTarget *target;
-	};
+	};*/
 };
 
 #endif

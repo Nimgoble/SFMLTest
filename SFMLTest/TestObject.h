@@ -14,9 +14,9 @@ namespace SFMLTest
 	public:
 		TestObject() : WorldObject()
 		{
-			rectangle = sf::RectangleShape(this->boundingBox);
+			rectangle = sf::RectangleShape(sf::Vector2f(this->aabb.E.x, aabb.E.y));
 			rectangle.setFillColor(sf::Color::Blue);
-			rectangle.setPosition(position);
+			rectangle.setPosition(aabb.P.x, aabb.P.y);
 		}
 
 		~TestObject()
@@ -24,23 +24,21 @@ namespace SFMLTest
 		}
 
 		TestObject(const sf::Color &color, 
-					sf::Vector2f boundingBox, 
-					sf::Vector2f position, 
-					sf::Vector2f velocity, 
-					float weight, 
-					b2Body *boxBody) : 
-			WorldObject(boundingBox, position, velocity, weight)
+					sf::Vector3f boundingBox, 
+					sf::Vector3f position, 
+					sf::Vector3f velocity, 
+					float weight) : 
+		WorldObject(WorldObjectType::Static, boundingBox, position, velocity, weight)
 		{
-			this->boxBody = boxBody;
-			boxBody->SetTransform(b2Vec2(position.x / conversionFactor  , position.y / conversionFactor  ), 0.0f);
-			b2PolygonShape shapeBox;
-			shapeBox.SetAsBox(boundingBox.x / conversionFactor  , boundingBox.y / conversionFactor  );
-			boxFixture = boxBody->CreateFixture(&shapeBox, 0.0f);
-
-			rectangle = sf::RectangleShape(this->boundingBox);
+			rectangle = sf::RectangleShape(sf::Vector2f(this->aabb.E.x, aabb.E.y));
 			rectangle.setFillColor(color);
-			rectangle.setPosition(position);
+			sf::Vector2f origin = sf::Vector2f(boundingBox.x / 2, boundingBox.y / 2);
+			rectangle.setOrigin(origin);
+			aabb.P += sf::Vector3f(origin.x, origin.y, 0.0f);
+			rectangle.setPosition(sf::Vector2f(aabb.P.x, aabb.P.y));
 		}
+
+		virtual void setColor(const sf::Color &color) { rectangle.setFillColor(color);}
 
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
 		{
@@ -49,7 +47,6 @@ namespace SFMLTest
 
 	private:
 		sf::RectangleShape rectangle;
-		b2Fixture *boxFixture;
 	};
 };
 #endif

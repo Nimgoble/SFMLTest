@@ -1,22 +1,17 @@
 #include "World.h"
 #include "TestObject.h"
 #include "Player.h"
+#include "Line.h"
 
 using namespace SFMLTest;
 
 World::World( sf::RenderWindow *window )
 {
 	this->window = window;
-	debugDrawer.setRenderTarget(window);
-	debugDrawer.SetFlags( b2Draw::e_shapeBit | b2Draw::e_aabbBit | b2Draw::e_centerOfMassBit );
 
 	size = sf::Vector2f(window->getSize().x, window->getSize().y);
-	tileSize = 25;
+	tileSize = 32;
 	grid = Grid(sf::Vector2f(0.0f, 0.0f), size, tileSize);
-
-	gravity = b2Vec2(0.0f, 10.0f);
-	world = new b2World(gravity);
-	world->SetDebugDraw(&debugDrawer);
 	
 	CreateTestObjects();
 }
@@ -35,14 +30,6 @@ void World::Cleanup()
 		delete object;
 		object = NULL;
 	}
-
-	for(int i = 0; i < b2Bodies.size(); i++)
-	{
-		world->DestroyBody(b2Bodies[i]);
-	}
-
-	delete world;
-	world = NULL;
 }
 
 void World::DoCollisions()
@@ -53,28 +40,50 @@ void World::DoCollisions()
 	for(; iter != iterEnd; iter++)
 	{
 		WorldObject *object = *(iter);
+		object->currentCollisionCount = 0;
+	}
+
+	iter = worldObjects.begin();
+	for(; iter != iterEnd; iter++)
+	{
+		WorldObject *object = *(iter);
 		std::vector<WorldObject *>::iterator nextIter = iter;
 		++nextIter;
 
-		sf::Vector2f currentPosition = object->getPosition();
-		sf::Vector2f currentVelocity = object->getVelocity();
+		sf::Vector3f currentPosition = object->getPosition();
+		sf::Vector3f currentVelocity = object->getVelocity();
 
+		bool collision = false;
 		//Collisiong detection against all of the other entities goes here:
 		for(; nextIter != iterEnd; nextIter++)
 		{
 			WorldObject *nextObject = *(nextIter);
-
+			if(object->CheckCollision(*nextObject))
+			{
+				object->currentCollisionCount++;
+				nextObject->currentCollisionCount++;
+				collision = true;
+				window->draw(SFMLTest::Line(object->getPosition(), nextObject->getPosition()));
+			}
 		}
 
 		//Apply velocity if we can
-		object->setPosition(currentPosition + currentVelocity);
+		if(collision == false)
+			object->setPosition(currentPosition + currentVelocity);
+	}
+
+	iter = worldObjects.begin();
+	for(; iter != iterEnd; iter++)
+	{
+		WorldObject *object = *(iter);
+		sf::Color color = (object->currentCollisionCount != 0) ? sf::Color::Magenta : sf::Color::Red;
+		object->setColor(color);
 	}
 }
 
 void World::TickObjects()
 {
 	window->clear();
-	world->DrawDebugData();
 	//Draw each WorldObject
 	std::vector<WorldObject *>::iterator iter = worldObjects.begin();
 	std::vector<WorldObject *>::iterator iterEnd = worldObjects.end();
@@ -84,8 +93,7 @@ void World::TickObjects()
 		(*iter)->OnTick();
 		window->draw(**iter);
 	}
-
-	world->Step(1.0f/60.0f, 20, 20);
+	
 	//Draw the test grid
 	window->draw(grid);
 	window->display();
@@ -93,69 +101,44 @@ void World::TickObjects()
 
 void World::CreateTestObjects()
 {
-	b2BodyDef bodyDef;
-	//bodyDef.allowSleep = true;
-	bodyDef.awake = true;
-	bodyDef.active = true;
-	bodyDef.fixedRotation = true;
-	bodyDef.type = b2_staticBody;
+	sf::Vector2f horizontalBB2D = TileToBoundingBox(36, 1);
+	sf::Vector2f verticalBB2D = TileToBoundingBox(1, 23);
 
-	sf::Vector2f boundingBox(this->tileSize * 1.0f, this->tileSize * 1.0f);
+	sf::Vector3f horizontalBB = sf::Vector3f(horizontalBB2D.x, horizontalBB2D.y, 0.0f);
+	sf::Vector3f verticalBB = sf::Vector3f(verticalBB2D.x, verticalBB2D.y, 0.0f);
 
-	//sf::Vector2f position((float)this->tileSize, this->tileSize * 2.0f);
+	sf::Vector3f blankVector = sf::Vector3f(0, 0, 0);
+	//Top bar
+	TestObject *topBar = new TestObject(sf::Color::Red, horizontalBB, blankVector, blankVector, 0.0f); 
+	
+	//Bottom bar
+	sf::Vector2f bottomPosition = TileToVector(23, 0);
+	TestObject *bottomBar = new TestObject(sf::Color::Red, horizontalBB, sf::Vector3f(bottomPosition.x, bottomPosition.y, 0.0f), blankVector, 0.0f);
 
-	int rows = Rows() - 1, columns = Columns() - 1;
-	for(int i = 0; i <= columns; i++)
-	{
-		//top row
-		b2Body *body = world->CreateBody(&bodyDef);
-		TestObject *object1 = new TestObject(sf::Color::Blue, boundingBox, TileToVector(0, i), sf::Vector2f(), 0.0f, body);
-		worldObjects.push_back(object1);
-		b2Bodies.push_back(body);
-		//bottom row
-		body = world->CreateBody(&bodyDef);
-		TestObject *object2 = new TestObject(sf::Color::Blue, boundingBox, TileToVector(rows, i), sf::Vector2f(), 0.0f, body);
-		worldObjects.push_back(object2);
-		b2Bodies.push_back(body);
-	}
+	//Top bar
+	TestObject *leftBar= new TestObject(sf::Color::Red, verticalBB, blankVector, blankVector, 0.0f); 
+	
+	//Bottom bar
+	sf::Vector2f rightPosition = TileToVector(0, 36);
+	TestObject *rightBar = new TestObject(sf::Color::Red, verticalBB, sf::Vector3f(rightPosition.x, rightPosition.y, 0.0f), blankVector, 0.0f);
 
-	for(int i = 1; i <= (rows - 1); i++)
-	{
-		//left side
-		b2Body *body = world->CreateBody(&bodyDef);
-		TestObject *object1 = new TestObject(sf::Color::Blue, boundingBox, TileToVector(i, 0), sf::Vector2f(), 0.0f, body);
-		worldObjects.push_back(object1);
-		b2Bodies.push_back(body);
-		//right side
-		body = world->CreateBody(&bodyDef);
-		TestObject *object2 = new TestObject(sf::Color::Blue, boundingBox, TileToVector(i, columns), sf::Vector2f(), 0.0f, body);
-		worldObjects.push_back(object2);
-		b2Bodies.push_back(body);
-	}
 
-	int thirdOfRows = rows / 3;
+	worldObjects.push_back(topBar);
+	worldObjects.push_back(bottomBar);
+	worldObjects.push_back(leftBar);
+	worldObjects.push_back(rightBar);
 
-	for(int i = 1; i <= 10; i++)
-	{
-		//platform one
-		b2Body *body = world->CreateBody(&bodyDef);
-		TestObject *object1 = new TestObject(sf::Color::Blue, boundingBox, TileToVector(thirdOfRows, i), sf::Vector2f(), 0.0f, body);
-		worldObjects.push_back(object1);
-		b2Bodies.push_back(body);
-		//platform two
-		body = world->CreateBody(&bodyDef);
-		TestObject *object2 = new TestObject(sf::Color::Blue, boundingBox, TileToVector(thirdOfRows * 2, columns - i), sf::Vector2f(), 0.0f, body);
-		worldObjects.push_back(object2);
-		b2Bodies.push_back(body);
-	}
+	sf::Vector2f playerBB = TileToBoundingBox(1, 2);
+	sf::Vector2f playerPosition = TileToVector(1, 1);
+	Player *player = new Player(
+									sf::Color::Blue, 
+									sf::Vector3f(playerBB.x, playerBB.y, 0.0f), 
+									sf::Vector3f(playerPosition.x, playerPosition.y, 0.0f), 
+									blankVector,
+									1.0f
+								);
 
-	bodyDef.type = b2_dynamicBody;
-	bodyDef.allowSleep = false;
-	bodyDef.gravityScale = 10.0f;
-	b2Body *body = world->CreateBody(&bodyDef);
-	Player *player = new Player(sf::Color::Cyan, TileToBoundingBox(1, 2), TileToVector(3, 1), sf::Vector2f(), 1.0f, body);
 	worldObjects.push_back(player);
-	b2Bodies.push_back(body);
 }
 
 sf::Vector2f World::TileToVector(int row, int column)
