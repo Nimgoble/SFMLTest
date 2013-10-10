@@ -81,10 +81,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h" />
+    <ClInclude Include="CollisionInformation.h" />
     <ClInclude Include="ConversionHelpers.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="TestMovableObject.h" />
     <ClInclude Include="TestObject.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="WorldObject.h" />

@@ -18,7 +18,8 @@ public:
 	const bool overlaps( const AABB& b ) const
 	{
 		const sf::Vector3f T = b.P - P;//vector from A to B
-		return	fabs(T.x) <= (E.x + b.E.x) && fabs(T.y) <= (E.y + b.E.y) && fabs(T.z) <= (E.z + b.E.z);
+		bool rtn = fabs(T.x) <= ((E.x + b.E.x) / 2.0f) && fabs(T.y) <= ((E.y + b.E.y) / 2.0f) && fabs(T.z) <= (E.z + b.E.z);
+		return	rtn;
 	}
 
 	//NOTE: since the vector indexing operator is not const,
@@ -27,18 +28,18 @@ public:
 	//min x, y, or z
 	const sf::Vector3f min() const
 	{
-		return sf::Vector3f( ((AABB*)this)->P.x - ((AABB*)this)->E.x,
-							 ((AABB*)this)->P.y - ((AABB*)this)->E.y,
-							 ((AABB*)this)->P.z - ((AABB*)this)->E.z
+		return sf::Vector3f( ((AABB*)this)->P.x - (((AABB*)this)->E.x / 2.0f),
+							 ((AABB*)this)->P.y - (((AABB*)this)->E.y / 2.0f),
+							 ((AABB*)this)->P.z - (((AABB*)this)->E.z / 2.0f)
 							);
 	}
 
 	//max x, y, or z
 	const sf::Vector3f max() const
 	{
-		return sf::Vector3f( ((AABB*)this)->P.x + ((AABB*)this)->E.x,
-							 ((AABB*)this)->P.y + ((AABB*)this)->E.y,
-							 ((AABB*)this)->P.z + ((AABB*)this)->E.z
+		return sf::Vector3f( ((AABB*)this)->P.x + (((AABB*)this)->E.x / 2.0f),
+							 ((AABB*)this)->P.y + (((AABB*)this)->E.y / 2.0f),
+							 ((AABB*)this)->P.z + (((AABB*)this)->E.z / 2.0f)
 							);
 	}
 

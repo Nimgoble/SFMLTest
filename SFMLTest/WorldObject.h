@@ -3,8 +3,10 @@
 #ifndef WORLDOBJECT_H
 #define WORLDOBJECT_H
 
+#include <list>
 #include <SFML/Graphics.hpp>
 #include "AABB.h"
+#include "CollisionInformation.h"
 
 namespace SFMLTest
 {
@@ -20,9 +22,18 @@ namespace SFMLTest
 		WorldObject();
 		WorldObject(WorldObjectType type, sf::Vector3f boundingBox, sf::Vector3f position, sf::Vector3f velocity, float weight);
 
+		virtual void OnPreTick();
 		virtual void OnTick();
 
-		virtual bool CheckCollision(const WorldObject &other);
+		virtual CollisionType CheckCollision(const WorldObject &other);
+		virtual bool CheckCollision(const WorldObject &other, CollisionInformation &information);
+
+		//(Most)Walls don't need collision information 
+		virtual bool WantsCollisionInformation() {return (this->type == WorldObjectType::Movable);};
+		//Add to our list as they are made
+		virtual void OnCollision(CollisionInformation collision) {currentFrameCollisions.push_back(collision);};
+		//Called after all collisions are calculated, so we can process them all at once.
+		virtual void ProcessCollisions() {/*currentFrameCollisions.clear();*/};
 
 		//Accessors and Modifiers
 		const sf::Vector3f &getBoundingBox() const {return aabb.E;}
@@ -37,6 +48,8 @@ namespace SFMLTest
 		const sf::Vector3f &getVelocity() const {return velocity;}
 		void setVelocity(sf::Vector3f newVelocity) {velocity = newVelocity;}
 
+		void applyImpulse(sf::Vector3f impulse) {velocity += impulse;}
+
 		const float &getWeight() const {return weight;}
 		void setWeight(int newWeight) {weight = newWeight;}
 
@@ -44,7 +57,8 @@ namespace SFMLTest
 
 		//debugging
 		virtual void setColor(const sf::Color &color) {}
-		int currentCollisionCount;
+		virtual void setDefaultColor(const sf::Color &color) {defaultColor = color;}
+		virtual void resetColor() {};
 	protected:
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
@@ -54,7 +68,12 @@ namespace SFMLTest
 		AABB aabb;
 		float weight;
 
+		sf::Color defaultColor;
+
 		WorldObjectType type;
+
+		typedef std::list<CollisionInformation> CollisionList;
+		CollisionList currentFrameCollisions;
 	};
 };
 

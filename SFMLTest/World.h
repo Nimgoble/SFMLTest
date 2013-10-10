@@ -21,18 +21,20 @@ namespace SFMLTest
 		void Cleanup();
 	private:
 		//private methods
+		void PreTickObjects();
 		void TickObjects();
 		void DoCollisions();
 
 		void CreateTestObjects();
 
-		sf::Vector2f TileToVector(int column, int row);
-		sf::Vector2f TileToBoundingBox(int widthInTiles, int heightInTiles);
+		sf::Vector3f TileToVector(int column, int row);
+		sf::Vector3f TileToBoundingBox(int widthInTiles, int heightInTiles);
 
 		inline int Rows() {return (int)(size.y / tileSize);}
 		inline int Columns() {return (int)(size.x / tileSize);}
 
 		//private variables
+		sf::Vector3f gravity;
 		sf::Vector2f size;
 		int tileSize;
 

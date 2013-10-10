@@ -15,13 +15,20 @@ namespace SFMLTest
 					sf::Vector3f position, 
 					sf::Vector3f velocity, 
 					float weight);
+
+		virtual void OnPreTick();
 		virtual void OnTick();
+		virtual void ProcessCollisions();
 
 		virtual void setColor(const sf::Color &color) {rectangle.setFillColor(color);}
+		virtual void resetColor() {rectangle.setFillColor(defaultColor);}
 	protected:
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	private:
 		sf::RectangleShape rectangle;
+
+		//Debugging
+		sf::RectangleShape minShape, maxShape;
 
 		sf::Font debugFont;
 		sf::Text debugText;

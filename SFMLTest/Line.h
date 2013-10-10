@@ -16,9 +16,9 @@ namespace SFMLTest
 		{
 			this->start = start;
 			this->end = end;
-			vertexArray = sf::VertexArray(sf::Lines, 2);
-			vertexArray.append(sf::Vertex(sf::Vector2f(start.x, start.y)));
-			vertexArray.append(sf::Vertex(sf::Vector2f(end.x, end.y)));
+			vertexArray = sf::VertexArray(sf::LinesStrip, 2);
+			vertexArray[0] = (sf::Vertex(sf::Vector2f(start.x, start.y)));
+			vertexArray[1] = (sf::Vertex(sf::Vector2f(end.x, end.y)));
 		}
 
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const

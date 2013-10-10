@@ -1,4 +1,5 @@
 #include "WorldObject.h"
+#include "ConversionHelpers.h"
 
 using namespace SFMLTest;
 
@@ -16,15 +17,21 @@ WorldObject::WorldObject(WorldObjectType type, sf::Vector3f boundingBox, sf::Vec
 }
 
 //Nothing.
+void WorldObject::OnPreTick()
+{
+	//currentFrameCollisions.clear();
+}
+
+//Nothing.
 void WorldObject::OnTick()
 {
 }
 
-bool WorldObject::CheckCollision(const WorldObject &other)
+CollisionType WorldObject::CheckCollision(const WorldObject &other)
 {
 	//Static stuff ignores each other.
 	if(this->type == WorldObjectType::Static && other.getType() == WorldObjectType::Static)
-		return false;
+		return CollisionType::None;
 
 	const AABB A0( aabb.P, aabb.E );//current state of AABB A
 	const AABB &B0 = other.getAABB();//current state of AABB other
@@ -49,13 +56,33 @@ bool WorldObject::CheckCollision(const WorldObject &other)
 	if( A0.overlaps(B0) )
 	{
 		timeMin = timeMax = 0;
-		return true;
+		return CollisionType::Absolute;
 	}
+
+	//Prediction:
+	if(A1.overlaps(B1))
+		return CollisionType::Prediction;
+
+	sf::Vector3f intersectionPoint;
+	if(!SFMLTest::DoLinesIntersect(A0.P, A1.P, B0.P, B1.P, intersectionPoint))
+		return CollisionType::None;
+
+	//Find the time at which we would come to the intersection point
+
+	//Difference between intersection point and where we started this frame
+	sf::Vector3f intersectionTime = intersectionPoint - A0.P;
+	//What percentage of our velocity is the distance we are from the intersection point?
+	intersectionTime.x /= va.x;
+	intersectionTime.y /= va.y;
+
+	//TODO: Bullet through paper problem using the above intersection time
+
+	return CollisionType::None;
 
 	//find the possible first and last times
 	//of overlap along each axis
 
-	sf::Vector3f AMin = A0.min(), AMax = A0.max();
+	/*sf::Vector3f AMin = A0.min(), AMax = A0.max();
 	sf::Vector3f BMin = B0.min(), BMax = B0.max();
 
 	//X
@@ -100,7 +127,14 @@ bool WorldObject::CheckCollision(const WorldObject &other)
 	//they could have only collided if
 	//the first time of overlap occurred
 	//before the last time of overlap
-	return timeMin > timeMax;
+	bool rtn = timeMin > timeMax;
+	return rtn;*/
+}
+
+bool WorldObject::CheckCollision(const WorldObject &other, CollisionInformation &information)
+{
+	//TODO: all of this.
+	return false;
 }
 
 //Do nothing is the default behavior
