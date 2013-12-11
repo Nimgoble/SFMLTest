@@ -12,7 +12,7 @@ namespace SFMLTest
 	public:
 		Line();
 
-		Line(sf::Vector3f start, sf::Vector3f end)
+		Line(sf::Vector2f start, sf::Vector2f end)
 		{
 			this->start = start;
 			this->end = end;
@@ -28,8 +28,8 @@ namespace SFMLTest
 
 	private:
 		sf::VertexArray vertexArray;
-		sf::Vector3f start;
-		sf::Vector3f end;
+		sf::Vector2f start;
+		sf::Vector2f end;
 	};
 };
 

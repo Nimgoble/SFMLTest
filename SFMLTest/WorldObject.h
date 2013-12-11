@@ -20,7 +20,7 @@ namespace SFMLTest
 	{
 	public:
 		WorldObject();
-		WorldObject(WorldObjectType type, sf::Vector3f boundingBox, sf::Vector3f position, sf::Vector3f velocity, float weight);
+		WorldObject(WorldObjectType type, sf::Vector2f boundingBox, sf::Vector2f position, sf::Vector2f velocity, float weight);
 
 		virtual void OnPreTick();
 		virtual void OnTick();
@@ -36,19 +36,19 @@ namespace SFMLTest
 		virtual void ProcessCollisions() {/*currentFrameCollisions.clear();*/};
 
 		//Accessors and Modifiers
-		const sf::Vector3f &getBoundingBox() const {return aabb.E;}
-		void setBoundingBox(sf::Vector3f newBoundingBox) {aabb.E = newBoundingBox;}
+		const sf::Vector2f &getBoundingBox() const {return aabb.Extents();}
+		void setBoundingBox(sf::Vector2f newBoundingBox) {aabb.setExtents(newBoundingBox);}
 
-		const sf::Vector3f &getPosition() const {return aabb.P;}
-		void setPosition(sf::Vector3f newPosition) {aabb.P = newPosition;}
+		const sf::Vector2f &getPosition() const {return aabb.Position();}
+		void setPosition(sf::Vector2f newPosition) {aabb.setPosition(newPosition);}
 
 		const AABB &getAABB() const {return aabb;}
 		void setAABB( const AABB &other ) {aabb = other;}
 
-		const sf::Vector3f &getVelocity() const {return velocity;}
-		void setVelocity(sf::Vector3f newVelocity) {velocity = newVelocity;}
+		const sf::Vector2f &getVelocity() const {return velocity;}
+		void setVelocity(sf::Vector2f newVelocity) {velocity = newVelocity;}
 
-		void applyImpulse(sf::Vector3f impulse) {velocity += impulse;}
+		void applyImpulse(sf::Vector2f impulse) {velocity += impulse;}
 
 		const float &getWeight() const {return weight;}
 		void setWeight(int newWeight) {weight = newWeight;}
@@ -62,9 +62,9 @@ namespace SFMLTest
 	protected:
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-		//sf::Vector3f boundingBox;
-		//sf::Vector3f position;
-		sf::Vector3f velocity;
+		//sf::Vector2f boundingBox;
+		//sf::Vector2f position;
+		sf::Vector2f velocity;
 		AABB aabb;
 		float weight;
 
@@ -74,6 +74,8 @@ namespace SFMLTest
 
 		typedef std::list<CollisionInformation> CollisionList;
 		CollisionList currentFrameCollisions;
+
+		bool TestCollisionMethod(const AABB &A1, const AABB &B1);
 	};
 };
 

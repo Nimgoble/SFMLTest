@@ -5,7 +5,6 @@
 
 #include <SFML/Graphics.hpp>
 #include "WorldObject.h"
-#include "ConversionHelpers.h"
 
 namespace SFMLTest
 {
@@ -16,10 +15,10 @@ namespace SFMLTest
 		{
 			type = Movable;
 			defaultColor = sf::Color::White;
-			rectangle = sf::RectangleShape(sf::Vector2f(this->aabb.E.x, aabb.E.y));
+			rectangle = sf::RectangleShape(sf::Vector2f(this->aabb.Extents().x, aabb.Extents().y));
 			rectangle.setFillColor(sf::Color::Yellow);
-			rectangle.setOrigin(aabb.E.x / 2, aabb.E.y / 2);
-			rectangle.setPosition(aabb.P.x, aabb.P.y);
+			rectangle.setOrigin(aabb.Extents().x / 2, aabb.Extents().y / 2);
+			rectangle.setPosition(aabb.Position().x, aabb.Position().y);
 		}
 
 		~TestMovableObject()
@@ -27,30 +26,32 @@ namespace SFMLTest
 		}
 
 		TestMovableObject(const sf::Color &color, 
-					sf::Vector3f boundingBox, 
-					sf::Vector3f position, 
-					sf::Vector3f velocity, 
-					float weight) : 
+					sf::Vector2f boundingBox, 
+					sf::Vector2f position, 
+					sf::Vector2f velocity, 
+					float weight,
+					float maxX,
+					float minX) : 
 		WorldObject(WorldObjectType::Movable, boundingBox, position, velocity, weight)
 		{
-			rectangle = sf::RectangleShape(sf::Vector2f(this->aabb.E.x, aabb.E.y));
+			rectangle = sf::RectangleShape(sf::Vector2f(this->aabb.Extents().x, aabb.Extents().y));
 			defaultColor = color;
 			rectangle.setFillColor(color);
 			sf::Vector2f origin = sf::Vector2f(boundingBox.x / 2, boundingBox.y / 2);
 			rectangle.setOrigin(origin);
-			aabb.P += sf::Vector3f(origin.x, origin.y, 0.0f);
-			rectangle.setPosition(sf::Vector2f(aabb.P.x, aabb.P.y));
+			aabb.Move(origin);
+			rectangle.setPosition(sf::Vector2f(aabb.Position().x, aabb.Position().y));
+			this->maxX = maxX;
+			this->minX = minX;
 		}
 
 		virtual void OnPreTick()
 		{
 			//bounce back and forth
-			if(aabb.P.x > 800)
-				velocity.x = -0.05f;
-			else if(aabb.P.x < 75)
-				velocity.x = 0.05f;
+			if(aabb.Position().x > maxX || aabb.Position().x < minX)
+				velocity.x *= -1;
 
-			setPosition(aabb.P + velocity);
+			setPosition(aabb.Position() + velocity);
 
 			currentFrameCollisions.clear();
 		}
@@ -65,7 +66,7 @@ namespace SFMLTest
 		{
 			//if(currentFrameCollisions.size() <= 0)
 				//setColor(sf::Color::White);
-			rectangle.setPosition(sf::Vector2f(aabb.P.x, aabb.P.y));
+			rectangle.setPosition(sf::Vector2f(aabb.Position().x, aabb.Position().y));
 		}
 
 		virtual void setColor(const sf::Color &color) { rectangle.setFillColor(color);}
@@ -74,10 +75,13 @@ namespace SFMLTest
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
 		{
 			target.draw(rectangle, states);
+			WorldObject::draw(target, states);
 		}
 
 	private:
 		sf::RectangleShape rectangle;
+		float maxX;
+		float minX;
 	};
 };
 #endif

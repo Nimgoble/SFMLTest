@@ -27,7 +27,7 @@ namespace SFMLTest
 		WorldObject *collidedWith;
 		CollisionType type;
 		float collisionTime;
-		sf::Vector3f normal;
+		sf::Vector2f normal;
 	};
 };
 

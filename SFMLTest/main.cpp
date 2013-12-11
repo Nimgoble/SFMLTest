@@ -1,7 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include "World.h"
+#include "LineSegmentTests.h"
+
 int main()
 {
+	//SFMLTest::LineSegmentTests::RunTests();
     sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML works!");
 
 	SFMLTest::World world(&window);

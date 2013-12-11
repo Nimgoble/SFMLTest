@@ -5,7 +5,6 @@
 
 #include <SFML/Graphics.hpp>
 #include "WorldObject.h"
-#include "ConversionHelpers.h"
 
 namespace SFMLTest
 {
@@ -15,10 +14,10 @@ namespace SFMLTest
 		TestObject() : WorldObject()
 		{
 			defaultColor = sf::Color::Red;
-			rectangle = sf::RectangleShape(sf::Vector2f(this->aabb.E.x, aabb.E.y));
+			rectangle = sf::RectangleShape(sf::Vector2f(this->aabb.Extents().x, aabb.Extents().y));
 			rectangle.setFillColor(sf::Color::Blue);
-			rectangle.setOrigin(aabb.E.x / 2, aabb.E.y / 2);
-			rectangle.setPosition(aabb.P.x, aabb.P.y);
+			rectangle.setOrigin(aabb.Extents().x / 2, aabb.Extents().y / 2);
+			rectangle.setPosition(aabb.Position());
 		}
 
 		~TestObject()
@@ -26,19 +25,19 @@ namespace SFMLTest
 		}
 
 		TestObject(const sf::Color &color, 
-					sf::Vector3f boundingBox, 
-					sf::Vector3f position, 
-					sf::Vector3f velocity, 
+					sf::Vector2f boundingBox, 
+					sf::Vector2f position, 
+					sf::Vector2f velocity, 
 					float weight) : 
 		WorldObject(WorldObjectType::Static, boundingBox, position, velocity, weight)
 		{
-			rectangle = sf::RectangleShape(sf::Vector2f(this->aabb.E.x, aabb.E.y));
+			rectangle = sf::RectangleShape(aabb.Extents());
 			defaultColor = color;
 			rectangle.setFillColor(color);
 			sf::Vector2f origin = sf::Vector2f(boundingBox.x / 2, boundingBox.y / 2);
 			rectangle.setOrigin(origin);
-			aabb.P += sf::Vector3f(origin.x, origin.y, 0.0f);
-			rectangle.setPosition(sf::Vector2f(aabb.P.x, aabb.P.y));
+			aabb.Move(origin);
+			rectangle.setPosition(aabb.Position());
 		}
 
 		virtual void setColor(const sf::Color &color) { rectangle.setFillColor(color);}
@@ -47,6 +46,7 @@ namespace SFMLTest
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
 		{
 			target.draw(rectangle, states);
+			WorldObject::draw(target, states);
 		}
 
 	private:

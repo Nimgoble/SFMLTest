@@ -11,9 +11,9 @@ namespace SFMLTest
 	{
 	public:
 		Player(const sf::Color &color, 
-					sf::Vector3f boundingBox, 
-					sf::Vector3f position, 
-					sf::Vector3f velocity, 
+					sf::Vector2f boundingBox, 
+					sf::Vector2f position, 
+					sf::Vector2f velocity, 
 					float weight);
 
 		virtual void OnPreTick();

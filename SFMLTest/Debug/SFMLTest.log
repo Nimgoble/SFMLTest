@@ -1,4 +1,4 @@
-﻿Build started 10/10/2013 6:31:35 AM.
+﻿Build started 12/10/2013 5:44:05 PM.
      1>Project "E:\Programming\GitHub\SFMLTest\SFMLTest\SFMLTest.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\SFMLTest.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -14,4 +14,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.06
+Time Elapsed 00:00:00.03

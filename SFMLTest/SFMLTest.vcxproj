@@ -74,6 +74,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="LineSegmentTests.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="World.cpp" />
@@ -82,14 +83,18 @@
   <ItemGroup>
     <ClInclude Include="AABB.h" />
     <ClInclude Include="CollisionInformation.h" />
-    <ClInclude Include="ConversionHelpers.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Line.h" />
+    <ClInclude Include="LineSegment.h" />
+    <ClInclude Include="LineSegmentTests.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="TestMovableObject.h" />
     <ClInclude Include="TestObject.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="WorldObject.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Extras.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
